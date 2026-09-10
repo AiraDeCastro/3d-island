@@ -7,13 +7,13 @@ Milestones match the phased plan in [`isla-prd.html`](isla-prd.html#plan); file/
 Goal: an island on screen, nothing interactive yet.
 
 - [x] Scaffold Vite + TypeScript project, add three.js
-- [ ] Set up `src/` layout (`scene/`, `systems/`, `shaders/`, `ui/`, `quality/`) per PLANNING.md
-- [ ] Add `main.ts` render loop with delta-time clock
-- [ ] Build placeholder island terrain mesh (static, no deformation)
-- [ ] Add flat ocean plane (no wave shader yet)
-- [ ] Implement `Camera.ts` — damped orbit/pan, clamped to keep the island framed
-- [ ] Implement `Sky.ts` — procedural sky + positioned sun/directional light
-- [ ] Set up `EffectComposer` with ACES tone mapping
+- [x] Set up `src/` layout (`scene/`, `systems/`, `shaders/`, `ui/`, `quality/`) per PLANNING.md — `scene/` and `shaders/` exist now; `systems/`, `ui/`, `quality/` get created when Milestones 1–2 actually add content to them
+- [x] Add `main.ts` render loop with delta-time clock
+- [x] Build placeholder island terrain mesh (static, no deformation)
+- [x] Add flat ocean plane (no wave shader yet)
+- [x] Implement `Camera.ts` — damped orbit/pan, clamped to keep the island framed
+- [x] Implement `Sky.ts` — procedural sky + positioned sun/directional light
+- [x] Set up `EffectComposer` with ACES tone mapping
 - [ ] Deploy an early build to a preview URL for visual sign-off
 
 ## Milestone 1 — Core interactivity (3–4 wks)

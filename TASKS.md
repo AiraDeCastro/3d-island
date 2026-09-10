@@ -14,7 +14,7 @@ Goal: an island on screen, nothing interactive yet.
 - [x] Implement `Camera.ts` — damped orbit/pan, clamped to keep the island framed
 - [x] Implement `Sky.ts` — procedural sky + positioned sun/directional light
 - [x] Set up `EffectComposer` with ACES tone mapping
-- [ ] Deploy an early build to a preview URL for visual sign-off — **blocked on you**: connect the `3d-island` GitHub repo to Vercel (or Netlify) from their dashboard; account sign-up isn't something I can do for you. Once connected it redeploys automatically on every push to `main`.
+- [x] Deploy an early build to a preview URL for visual sign-off — live at [3d-island-lemon.vercel.app](https://3d-island-lemon.vercel.app), redeploys automatically on every push to `main`
 
 ## Milestone 1 — Core interactivity (3–4 wks)
 

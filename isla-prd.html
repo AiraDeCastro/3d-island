@@ -1,0 +1,627 @@
+<title>Isla PRD</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Domine:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --paper: #efeae0;
+    --paper-alt: #e4ddc9;
+    --paper-deep: #d9d0b7;
+    --ink: #1b2e2c;
+    --ink-soft: #52655f;
+    --ink-faint: #7c8b83;
+    --accent: #0e7c74;
+    --accent-soft: #0e7c7420;
+    --accent-2: #b8842f;
+    --line: rgba(27, 46, 44, 0.16);
+    --line-strong: rgba(27, 46, 44, 0.32);
+    --good: #2f7a4d;
+    --warn: #b8842f;
+    --risk: #ad4a35;
+    --shadow: 0 1px 0 rgba(27, 46, 44, 0.06);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #101f1d;
+      --paper-alt: #16302c;
+      --paper-deep: #1c3a34;
+      --ink: #e9e3d1;
+      --ink-soft: #a7b7b0;
+      --ink-faint: #7c9089;
+      --accent: #56d8c6;
+      --accent-soft: #56d8c626;
+      --accent-2: #e3b563;
+      --line: rgba(233, 227, 209, 0.14);
+      --line-strong: rgba(233, 227, 209, 0.28);
+      --good: #5fbb85;
+      --warn: #e3b563;
+      --risk: #e08267;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #101f1d;
+    --paper-alt: #16302c;
+    --paper-deep: #1c3a34;
+    --ink: #e9e3d1;
+    --ink-soft: #a7b7b0;
+    --ink-faint: #7c9089;
+    --accent: #56d8c6;
+    --accent-soft: #56d8c626;
+    --accent-2: #e3b563;
+    --line: rgba(233, 227, 209, 0.14);
+    --line-strong: rgba(233, 227, 209, 0.28);
+    --good: #5fbb85;
+    --warn: #e3b563;
+    --risk: #e08267;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Public Sans', -apple-system, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  ::selection { background: var(--accent-soft); }
+
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 56px 28px 96px;
+  }
+
+  /* ---------- header ---------- */
+
+  .kicker {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 14px;
+  }
+
+  .title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  h1.product {
+    font-family: 'Domine', Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(42px, 8vw, 64px);
+    line-height: 1;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .product-mark {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+
+  .tagline {
+    font-size: 19px;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 16px 0 0;
+    text-wrap: balance;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 28px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .meta-item {
+    padding: 10px 22px 10px 0;
+    margin-right: 22px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12.5px;
+  }
+  .meta-item:not(:last-child) { border-right: 1px solid var(--line); }
+  .meta-item .label {
+    display: block;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 10.5px;
+    margin-bottom: 3px;
+  }
+  .meta-item .value { color: var(--ink); }
+  .status-pill {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ---------- spec strip ---------- */
+
+  .specs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin: 32px 0 8px;
+  }
+  .spec {
+    background: var(--paper);
+    padding: 16px 16px 14px;
+  }
+  .spec .num {
+    font-family: 'Domine', serif;
+    font-weight: 600;
+    font-size: 25px;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .spec .lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 4px;
+  }
+  @media (max-width: 620px) {
+    .specs { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ---------- nav ---------- */
+
+  nav.toc {
+    margin: 40px 0 8px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  nav.toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 0;
+  }
+  nav.toc li { display: flex; align-items: center; }
+  nav.toc a {
+    font-family: 'Space Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 4px 12px 4px 0;
+  }
+  nav.toc a:hover { color: var(--accent); }
+  nav.toc li:not(:last-child)::after {
+    content: "·";
+    color: var(--ink-faint);
+    margin-right: 6px;
+  }
+
+  /* ---------- sections ---------- */
+
+  section { margin-top: 64px; }
+  section:first-of-type { margin-top: 48px; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .section-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    padding-top: 3px;
+  }
+  h2 {
+    font-family: 'Domine', Georgia, serif;
+    font-weight: 600;
+    font-size: 28px;
+    margin: 0;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: 'Domine', Georgia, serif;
+    font-weight: 600;
+    font-size: 18px;
+    margin: 28px 0 8px;
+  }
+
+  p { max-width: 68ch; margin: 0 0 14px; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  ul.plain, ol.plain { margin: 0 0 14px; padding-left: 22px; max-width: 68ch; }
+  ul.plain li, ol.plain li { margin-bottom: 6px; }
+
+  strong { color: var(--ink); font-weight: 600; }
+
+  .callout {
+    border-left: 2px solid var(--accent);
+    padding: 2px 0 2px 18px;
+    margin: 20px 0;
+    max-width: 64ch;
+    color: var(--ink-soft);
+    font-size: 15px;
+  }
+  .callout strong { color: var(--ink); }
+
+  /* ---------- wave divider ---------- */
+
+  .wave {
+    width: 100%;
+    height: 20px;
+    margin: 56px 0 0;
+    color: var(--accent);
+    opacity: 0.55;
+  }
+
+  /* ---------- tables ---------- */
+
+  .table-wrap { overflow-x: auto; margin: 4px 0 20px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 560px;
+    font-size: 14.5px;
+  }
+  caption {
+    text-align: left;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+  thead th {
+    text-align: left;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 400;
+    padding: 0 14px 8px 0;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  tbody td {
+    padding: 12px 14px 12px 0;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.name { font-weight: 600; white-space: nowrap; }
+  td.desc { color: var(--ink-soft); }
+  .tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .tag.p0 { background: var(--accent-soft); color: var(--accent); }
+  .tag.p1 { background: var(--line); color: var(--ink-soft); }
+  .tag.risk-high { background: color-mix(in srgb, var(--risk) 18%, transparent); color: var(--risk); }
+  .tag.risk-med { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+
+  /* ---------- metrics ---------- */
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin: 20px 0 28px;
+  }
+  .metric {
+    background: var(--paper);
+    padding: 18px;
+  }
+  .metric .target {
+    font-family: 'Domine', serif;
+    font-size: 26px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .metric .what {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  /* ---------- footer ---------- */
+
+  footer {
+    margin-top: 80px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-family: 'Space Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (max-width: 560px) {
+    .page { padding: 40px 18px 72px; }
+    footer { flex-direction: column; }
+  }
+</style>
+
+<div class="page">
+
+  <p class="kicker">Product Requirements Document</p>
+  <div class="title-row">
+    <h1 class="product">Isla</h1>
+    <span class="product-mark">three.js · WebGL</span>
+  </div>
+  <p class="tagline">A living, touchable island in the browser — sand you can sculpt, water that finds the shore, palms and thatch that answer the wind. No login, no tutorial, no objective. Just a beach that responds.</p>
+
+  <div class="meta">
+    <div class="meta-item"><span class="label">Status</span><span class="value"><span class="status-pill">Draft</span></span></div>
+    <div class="meta-item"><span class="label">Version</span><span class="value">0.1</span></div>
+    <div class="meta-item"><span class="label">Owner</span><span class="value">Aira Nicole de Castro</span></div>
+    <div class="meta-item"><span class="label">Last updated</span><span class="value">2026-09-09</span></div>
+    <div class="meta-item"><span class="label">Platform</span><span class="value">Web (desktop + mobile)</span></div>
+  </div>
+
+  <div class="specs">
+    <div class="spec"><div class="num">60fps</div><div class="lbl">Desktop target</div></div>
+    <div class="spec"><div class="num">&lt;3s</div><div class="lbl">Time to interactive</div></div>
+    <div class="spec"><div class="num">1</div><div class="lbl">Scene, zero menus</div></div>
+    <div class="spec"><div class="num">0</div><div class="lbl">Accounts required</div></div>
+  </div>
+
+  <nav class="toc" aria-label="Table of contents">
+    <ol>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#goals">Goals &amp; non-goals</a></li>
+      <li><a href="#users">Who it's for</a></li>
+      <li><a href="#features">Core features</a></li>
+      <li><a href="#stretch">Post-MVP</a></li>
+      <li><a href="#ux">Interaction &amp; UX</a></li>
+      <li><a href="#tech">Technical approach</a></li>
+      <li><a href="#metrics">Success metrics</a></li>
+      <li><a href="#risks">Risks</a></li>
+      <li><a href="#plan">Phased plan</a></li>
+    </ol>
+  </nav>
+
+  <section id="overview">
+    <div class="section-head"><span class="section-num">01</span><h2>Overview &amp; vision</h2></div>
+    <div class="prose">
+      <p><strong>Isla</strong> is a single-scene, browser-based 3D experience: one island, rendered in three.js, that the visitor can reach into. Drag a finger or cursor through the sand and it displaces — footprints, trenches, trails that soften back to smooth over time. Waves roll in on their own rhythm and darken the sand where they reach, then retreat leaving a foam line. Coconut trees lean and hiss in a wind that also tugs at hut thatch and hammock cloth. Nothing needs to be clicked to start; the island is already alive when the page loads, and touching it is the whole point.</p>
+      <p>The reference feeling is a real beach at low tide — the odd calm of a place that keeps moving on its own, and the small satisfaction of leaving a mark in the sand that the sea will eventually erase. Isla is not a game to win; it's an ambient object to visit, fidget with, and leave running in a tab.</p>
+    </div>
+  </section>
+
+  <section id="goals">
+    <div class="section-head"><span class="section-num">02</span><h2>Goals &amp; non-goals</h2></div>
+    <h3>Goals</h3>
+    <ul class="plain">
+      <li>A WebGL scene that reads as <strong>beautiful within the first second</strong> — lighting, water, and foliage carry the page before any interaction happens.</li>
+      <li>Direct manipulation that feels physical: sand deforms under the cursor/finger with no visible lag, and the effect persists and decays like real sand.</li>
+      <li>An environment that feels inhabited even when idle — wind, waves, and light are always doing something.</li>
+      <li>Runs acceptably on a mid-range phone, not just a gaming desktop.</li>
+    </ul>
+    <h3>Non-goals (v1)</h3>
+    <ul class="plain">
+      <li>No scoring, quests, or win condition.</li>
+      <li>No multiplayer or shared state — each visitor gets their own island. <em>(Candidate for backlog, see §5.)</em></li>
+      <li>No terrain/scene editor — visitors shape sand, they don't place objects or build.</li>
+      <li>No accounts, no monetization, no data collection beyond standard anonymous analytics.</li>
+    </ul>
+  </section>
+
+  <section id="users">
+    <div class="section-head"><span class="section-num">03</span><h2>Who it's for</h2></div>
+    <div class="prose">
+      <p><strong>Casual visitors</strong> arriving via a shared link or a portfolio — people who give a page 5–10 seconds to earn their attention and want something calming, not something to learn.</p>
+      <p><strong>Designers and developers</strong> who'll inspect the craft — shader quality, load performance, and interaction feel are the pitch here, so the build itself is part of the audience's experience.</p>
+      <p><strong>Anyone looking to unwind for a minute</strong> — a browser-tab equivalent of a desk fidget toy or a screensaver worth staring at.</p>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="section-head"><span class="section-num">04</span><h2>Core features — MVP</h2></div>
+    <p>Everything below ships together; Isla doesn't have a meaningful v1 with any one of these missing.</p>
+    <div class="table-wrap">
+      <table>
+        <caption>Feature manifest</caption>
+        <thead>
+          <tr><th>Feature</th><th>What it does</th><th>Priority</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name">Sand interaction</td>
+            <td class="desc">Cursor/touch drag stamps into a height field in real time — displacement plus recomputed normals, so light catches the new shape immediately. Marks soften and level out over ~30–60s. Fast drags kick up a light burst of sand particles.</td>
+            <td><span class="tag p0">P0</span></td>
+          </tr>
+          <tr>
+            <td class="name">Ocean &amp; shoreline</td>
+            <td class="desc">Shader-driven waves (summed Gerstner functions) roll toward the beach on a loop. Where water meets sand: darkened "wet sand" band, a thin foam trail that advances and retreats, and light interaction with any footprints in the wash zone.</td>
+            <td><span class="tag p0">P0</span></td>
+          </tr>
+          <tr>
+            <td class="name">Coconut trees</td>
+            <td class="desc">Hand-placed low-poly palms; trunk and frond vertices sway on a shared wind uniform, each tree offset by a random phase so the grove doesn't move in lockstep.</td>
+            <td><span class="tag p0">P0</span></td>
+          </tr>
+          <tr>
+            <td class="name">Beach huts</td>
+            <td class="desc">One or two thatched huts with a cloth element each — a curtain, a hammock — driven by the same wind system, plus a warm interior glow toward dusk lighting.</td>
+            <td><span class="tag p0">P0</span></td>
+          </tr>
+          <tr>
+            <td class="name">Wind system</td>
+            <td class="desc">One global direction/strength value driving tree sway, cloth motion, water ripple detail, and a light drift of loose sand particles — the thread that ties the scene together.</td>
+            <td><span class="tag p0">P0</span></td>
+          </tr>
+          <tr>
+            <td class="name">Sky &amp; light</td>
+            <td class="desc">Procedural sky with a positioned sun driving shadows and water specular highlights; ACES tone mapping so highlights on water don't blow out.</td>
+            <td><span class="tag p0">P0</span></td>
+          </tr>
+          <tr>
+            <td class="name">Camera</td>
+            <td class="desc">Damped orbit/pan, clamped to a range that always keeps the island framed — no way to spin off into empty sky or clip through the sand.</td>
+            <td><span class="tag p0">P0</span></td>
+          </tr>
+          <tr>
+            <td class="name">Ambient audio</td>
+            <td class="desc">Looping surf and wind bed, muted by default on mobile per autoplay policy, one visible mute toggle.</td>
+            <td><span class="tag p0">P0</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="stretch">
+    <div class="section-head"><span class="section-num">05</span><h2>Post-MVP</h2></div>
+    <p>Worth designing for, not worth blocking launch on.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Idea</th><th>Why it waits</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="name">Time-of-day cycle</td><td class="desc">Changes lighting, sky, and hut-glow logic throughout — meaningful scope on top of a static sunset.</td><td><span class="tag p1">P1</span></td></tr>
+          <tr><td class="name">Weather (rain, squall)</td><td class="desc">New particle and audio systems layered on wind; needs the base wind system proven first.</td><td><span class="tag p1">P1</span></td></tr>
+          <tr><td class="name">Shared island (multiplayer)</td><td class="desc">Turns a static asset into a small real-time service — separate infra decision, see open questions.</td><td><span class="tag p1">P1</span></td></tr>
+          <tr><td class="name">Customization</td><td class="desc">Sand tint, hut style, tree density — nice-to-have once the core loop is validated.</td><td><span class="tag p1">P1</span></td></tr>
+          <tr><td class="name">Screenshot / share card</td><td class="desc">Captures the canvas at a chosen angle for social sharing.</td><td><span class="tag p1">P1</span></td></tr>
+          <tr><td class="name">Ambient life</td><td class="desc">Crabs, gulls, fish in the shallows — small easter eggs, not core to the pitch.</td><td><span class="tag p1">P1</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="ux">
+    <div class="section-head"><span class="section-num">06</span><h2>Interaction &amp; UX principles</h2></div>
+    <ul class="plain">
+      <li><strong>No chrome by default.</strong> Full-bleed canvas; the only persistent controls are mute and a quality toggle, both small and corner-docked.</li>
+      <li><strong>Self-teaching, not explained.</strong> A soft "drag the sand" hint fades in after two idle seconds and fades out permanently after the first drag — no modal, no tutorial overlay.</li>
+      <li><strong>Everything eases.</strong> Camera, sand relaxation, and wind gusts all move on damped curves; nothing snaps.</li>
+      <li><strong>Same experience, adapted rendering.</strong> Touch and mouse both drive the sand and camera; on lower-tier devices the scene simplifies (see §7) rather than removing interactions.</li>
+    </ul>
+    <div class="callout"><strong>Design bar:</strong> if a first-time visitor doesn't touch the sand within 10 seconds of arriving, the scene hasn't done its job of inviting them in.</div>
+  </section>
+
+  <svg class="wave" viewBox="0 0 1200 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 12 C 100 2, 200 22, 300 12 S 500 2, 600 12 S 800 22, 900 12 S 1100 2, 1200 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+
+  <section id="tech">
+    <div class="section-head"><span class="section-num">07</span><h2>Technical approach</h2></div>
+    <h3>Rendering</h3>
+    <div class="prose">
+      <p>Three.js on a Vite/TypeScript build. Water is a sum of Gerstner waves computed per-vertex on a subdivided plane, with a normal map derived in-shader for lighting and a Fresnel term for the reflect/refract blend at grazing angles. Sand displacement uses a GPGPU-style ping-pong render target: pointer drags stamp a brush shape into a height texture each frame, that texture drives vertex displacement on the beach mesh and feeds a recomputed normal for lighting, and a slow decay pass blends the texture back toward flat over time — the same mechanism handles both the deformation and its erosion.</p>
+      <p>Foliage and cloth sway from a single wind uniform (direction, strength, gust noise) sampled in the vertex shader with a per-instance phase offset, so palms, thatch fringes, and hammocks all answer the same "weather" without separate systems.</p>
+    </div>
+    <h3>Assets &amp; performance</h3>
+    <ul class="plain">
+      <li>glTF models, Draco-compressed geometry, KTX2/Basis textures.</li>
+      <li>Instanced rendering for repeated foliage; frustum culling and simple LOD swaps at distance.</li>
+      <li>Adaptive quality: device capability probe on load sets shadow resolution, wave mesh density, and pixel ratio; a manual override sits in the quality toggle.</li>
+      <li>Post-processing kept light — bloom on water highlights and ACES tone mapping; ambient occlusion only at the highest quality tier.</li>
+    </ul>
+    <h3>Hosting</h3>
+    <p>Static build on a CDN-backed host (Vercel/Netlify-class); no backend required for MVP since each session is a self-contained island.</p>
+  </section>
+
+  <section id="metrics">
+    <div class="section-head"><span class="section-num">08</span><h2>Success metrics</h2></div>
+    <div class="metrics">
+      <div class="metric"><div class="target">&lt;3s</div><div class="what">Time-to-interactive, broadband desktop</div></div>
+      <div class="metric"><div class="target">&lt;5s</div><div class="what">Time-to-interactive, mobile</div></div>
+      <div class="metric"><div class="target">60fps</div><div class="what">Sustained, 2022+ laptop</div></div>
+      <div class="metric"><div class="target">30fps+</div><div class="what">Sustained, mid-range phone</div></div>
+    </div>
+    <div class="prose">
+      <p>Alongside the performance floor: share of visitors who touch the sand or water within their first 10 seconds, and median session length. Qualitative signal — unprompted words like "calming" or "smooth" in feedback — matters as much as the numbers for a project whose entire pitch is a feeling.</p>
+    </div>
+  </section>
+
+  <section id="risks">
+    <div class="section-head"><span class="section-num">09</span><h2>Risks &amp; open questions</h2></div>
+    <div class="table-wrap">
+      <table>
+        <caption>Risks</caption>
+        <thead><tr><th>Risk</th><th>Mitigation</th><th></th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="name">Mobile GPU ceiling</td>
+            <td class="desc">Wave shader + sand heightmap are the two most expensive systems. Mitigate with the adaptive quality tiers in §7 and a hard cap on wave-mesh subdivisions on mobile.</td>
+            <td><span class="tag risk-high">High</span></td>
+          </tr>
+          <tr>
+            <td class="name">Asset weight vs. load target</td>
+            <td class="desc">Trees, huts, and textures compete with the &lt;3s goal. Mitigate with Draco/KTX2 compression and loading a low-detail island first, then streaming detail in.</td>
+            <td><span class="tag risk-med">Medium</span></td>
+          </tr>
+          <tr>
+            <td class="name">Safari WebGL quirks</td>
+            <td class="desc">Historically inconsistent shader precision and extension support. Mitigate with early cross-browser testing rather than a Chrome-only build cycle.</td>
+            <td><span class="tag risk-med">Medium</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Open questions</h3>
+    <ul class="plain">
+      <li>Is Isla a standalone product, a portfolio centerpiece, or a component meant to embed elsewhere (e.g., a landing-page hero)? Affects how much chrome and branding it should carry.</li>
+      <li>Is a shared/multiplayer island (§5) worth the infra investment, or does a private island per visitor stay the better fit for the "calm, yours alone" feeling?</li>
+      <li>Is "Isla" the final name and domain, or a working title?</li>
+    </ul>
+  </section>
+
+  <svg class="wave" viewBox="0 0 1200 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 12 C 100 2, 200 22, 300 12 S 500 2, 600 12 S 800 22, 900 12 S 1100 2, 1200 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+
+  <section id="plan">
+    <div class="section-head"><span class="section-num">10</span><h2>Phased plan</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Phase</th><th>Duration</th><th>Deliverable</th></tr></thead>
+        <tbody>
+          <tr><td class="name">0 · Prototype</td><td class="desc">2–3 wks</td><td class="desc">Static island, basic camera, flat ocean plane, first lighting pass.</td></tr>
+          <tr><td class="name">1 · Core interactivity</td><td class="desc">3–4 wks</td><td class="desc">Sand heightmap deformation, Gerstner wave shoreline, wind-driven tree sway.</td></tr>
+          <tr><td class="name">2 · Polish</td><td class="desc">2–3 wks</td><td class="desc">Huts with cloth motion, ambient audio, post-processing, mobile quality tiers.</td></tr>
+          <tr><td class="name">3 · Launch</td><td class="desc">1–2 wks</td><td class="desc">Cross-device QA, analytics wiring, deploy.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <span>Isla — Product Requirements Document</span>
+    <span>v0.1 · Draft · 2026-09-09</span>
+  </footer>
+
+</div>

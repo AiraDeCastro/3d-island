@@ -1,27 +1,24 @@
 import { describe, expect, it } from 'vitest'
-import * as THREE from 'three'
-import { createIsland } from './Island'
+import { createIslandTrees, SAND_RADIUS } from './Island'
+import { WindSystem } from '../systems/WindSystem'
 
-describe('createIsland', () => {
-  it('adds exactly a sand disc and an ocean disc', () => {
-    const island = createIsland()
-    const meshes = island.children.filter((c): c is THREE.Mesh => c instanceof THREE.Mesh)
+describe('createIslandTrees', () => {
+  it('places every tree within the sand radius', () => {
+    const wind = new WindSystem()
+    const grove = createIslandTrees(wind.uniforms)
 
-    expect(meshes).toHaveLength(2)
-    expect(meshes.map((m) => m.name).sort()).toEqual(['ocean', 'sand'])
+    expect(grove.children.length).toBeGreaterThan(0)
+    for (const tree of grove.children) {
+      const distance = Math.hypot(tree.position.x, tree.position.z)
+      expect(distance).toBeLessThan(SAND_RADIUS)
+    }
   })
 
-  it('keeps the ocean disc below and wider than the sand disc', () => {
-    const island = createIsland()
-    const sand = island.getObjectByName('sand') as THREE.Mesh
-    const ocean = island.getObjectByName('ocean') as THREE.Mesh
+  it('gives each placed tree its own rotation to avoid an obviously repeated layout', () => {
+    const wind = new WindSystem()
+    const grove = createIslandTrees(wind.uniforms)
+    const rotations = new Set(grove.children.map((tree) => tree.rotation.y.toFixed(3)))
 
-    sand.geometry.computeBoundingSphere()
-    ocean.geometry.computeBoundingSphere()
-
-    expect(ocean.geometry.boundingSphere!.radius).toBeGreaterThan(
-      sand.geometry.boundingSphere!.radius,
-    )
-    expect(ocean.position.y).toBeLessThan(sand.position.y)
+    expect(rotations.size).toBe(grove.children.length)
   })
 })

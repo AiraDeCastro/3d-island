@@ -29,6 +29,20 @@ export function createControls(
   controls.maxDistance = 20
   controls.minPolarAngle = THREE.MathUtils.degToRad(15)
   controls.maxPolarAngle = THREE.MathUtils.degToRad(85)
+
+  // Left-click/one-finger drag is reserved for shaping the sand (see
+  // main.ts's pointer handling) — the camera answers to the right button
+  // or a two-finger gesture instead.
+  controls.mouseButtons = {
+    LEFT: null,
+    MIDDLE: THREE.MOUSE.DOLLY,
+    RIGHT: THREE.MOUSE.ROTATE,
+  }
+  controls.touches = {
+    ONE: null,
+    TWO: THREE.TOUCH.DOLLY_ROTATE,
+  }
+
   controls.update()
   return controls
 }

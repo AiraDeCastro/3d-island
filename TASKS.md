@@ -20,20 +20,21 @@ Goal: an island on screen, nothing interactive yet.
 
 Goal: the three systems that make Isla *Isla* — sand, water, wind.
 
-- [ ] Implement `WindSystem.ts` — shared uniform (direction, strength, gust noise)
-- [ ] Implement `SandSystem.ts` — height render target with brush-stamp and decay passes
-- [ ] Write `sand.vert`/`sand.frag` — vertex displacement + recomputed normals from the height texture
-- [ ] Wire pointer/touch raycast onto the beach plane to drive the sand brush
-- [ ] Add sand particle kick-up on fast drags
-- [ ] Implement `OceanSystem.ts` and `water.vert`/`water.frag` — summed Gerstner waves, Fresnel reflect/refract
-- [ ] Add shoreline interaction — wet-sand darkening band and foam line sampling the sand height texture
-- [ ] Source/model coconut trees (glTF, Draco) and place in scene
-- [ ] Write `foliage.vert` — wind-driven sway with per-instance phase offset
+- [x] Implement `WindSystem.ts` — shared uniform (direction, strength, gust noise)
+- [x] Implement `SandSystem.ts` — height render target with brush-stamp and decay passes
+- [x] Write `sand.vert`/`sand.frag` — vertex displacement + recomputed normals from the height texture
+- [x] Wire pointer/touch raycast onto the beach plane to drive the sand brush — left-click/one-finger; camera orbit moved to right-click/two-finger so the two gestures don't compete
+- [x] Add sand particle kick-up on fast drags
+- [x] Implement `OceanSystem.ts` and `water.vert`/`water.frag` — summed Gerstner waves, Fresnel reflect/refract
+- [x] Add shoreline interaction — wet-sand darkening band and foam line sampling the sand height texture
+- [x] Source/model coconut trees and place in scene — **built procedurally, not glTF/Draco**: no modeling pipeline (Blender, gltf-transform) is wired up yet, so `CoconutTree.ts` generates trunk/fronds/coconuts in code as a placeholder. See the new Milestone 2 task below to revisit this.
+- [x] Write `foliage.vert` — wind-driven sway with per-instance phase offset
 
 ## Milestone 2 — Polish (2–3 wks)
 
 Goal: the scene feels inhabited and runs everywhere it needs to.
 
+- [ ] Set up a real modeling pipeline (Blender → glTF → `gltf-transform`/Draco) and replace the procedural `CoconutTree.ts` with authored, compressed tree assets — flagged when Milestone 1 built the trees procedurally instead
 - [ ] Source/model 1–2 beach huts (thatched roof) with one cloth element each (curtain or hammock)
 - [ ] Wire hut cloth to the `WindSystem` uniform
 - [ ] Add warm interior hut glow for dusk lighting

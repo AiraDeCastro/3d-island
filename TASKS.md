@@ -52,7 +52,7 @@ Goal: shipped, measured, stable.
 
 - [ ] Cross-browser QA — Chrome, Firefox, desktop Safari, mobile Safari, mobile Chrome
 - [ ] Profile frame time (Spector.js / DevTools); fix hot spots against the 60fps desktop / 30fps mobile targets
-- [ ] Run Lighthouse; confirm <3s desktop / <5s mobile time-to-interactive
+- [ ] Run Lighthouse; confirm <3s desktop / <5s mobile time-to-interactive — main bundle is ~700KB minified as of Milestone 2 (three.js + postprocessing/loader addons); consider code-splitting (e.g. lazy-load `SSAOPass` only on the high quality tier) if this budget is tight
 - [ ] Wire lightweight, privacy-respecting analytics (e.g. Plausible)
 - [ ] Check against PRD success metrics (§8) and the UX bar — touch within 10s of arrival
 - [ ] Deploy to production static host; verify CDN asset delivery

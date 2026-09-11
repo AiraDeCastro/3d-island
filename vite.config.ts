@@ -3,9 +3,11 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   build: {
-    // three.js alone is ~500kB minified; the default 500kB warning fires on
-    // every build until there's enough app code to justify code-splitting.
-    chunkSizeWarningLimit: 700,
+    // three.js + its postprocessing/loader addons make up most of this;
+    // real code-splitting (e.g. lazy-loading SSAOPass only on the high
+    // quality tier) is tracked in TASKS.md under Milestone 3's profiling
+    // pass rather than guessed at here.
+    chunkSizeWarningLimit: 800,
   },
   test: {
     environment: 'node',

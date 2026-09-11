@@ -1,24 +1,35 @@
 import { describe, expect, it } from 'vitest'
-import { createIslandTrees, SAND_RADIUS } from './Island'
-import { WindSystem } from '../systems/WindSystem'
+import { HUT_PLACEMENT, SAND_RADIUS, TREE_PLACEMENTS } from './Island'
 
-describe('createIslandTrees', () => {
-  it('places every tree within the sand radius', () => {
-    const wind = new WindSystem()
-    const grove = createIslandTrees(wind.uniforms)
+// createIslandTrees()/createIslandHut() themselves load a glTF over the
+// network via GLTFLoader — not something to exercise in a unit test (see
+// the same reasoning applied to SandSystem's GPU-bound constructor).
+// What's still worth pinning down is the hand-placed layout data itself.
 
-    expect(grove.children.length).toBeGreaterThan(0)
-    for (const tree of grove.children) {
-      const distance = Math.hypot(tree.position.x, tree.position.z)
-      expect(distance).toBeLessThan(SAND_RADIUS)
+describe('TREE_PLACEMENTS', () => {
+  it('keeps every tree within the sand radius', () => {
+    for (const placement of TREE_PLACEMENTS) {
+      expect(placement.distance).toBeLessThan(SAND_RADIUS)
     }
   })
 
-  it('gives each placed tree its own rotation to avoid an obviously repeated layout', () => {
-    const wind = new WindSystem()
-    const grove = createIslandTrees(wind.uniforms)
-    const rotations = new Set(grove.children.map((tree) => tree.rotation.y.toFixed(3)))
+  it('gives each tree its own yaw so the layout does not look stamped-out', () => {
+    const yaws = new Set(TREE_PLACEMENTS.map((p) => p.yaw))
+    expect(yaws.size).toBe(TREE_PLACEMENTS.length)
+  })
+})
 
-    expect(rotations.size).toBe(grove.children.length)
+describe('HUT_PLACEMENT', () => {
+  it('sits within the sand radius, clear of the shoreline', () => {
+    expect(HUT_PLACEMENT.distance).toBeLessThan(SAND_RADIUS - 1)
+  })
+
+  it("doesn't coincide with any tree's position", () => {
+    for (const placement of TREE_PLACEMENTS) {
+      const sameSpot =
+        Math.abs(placement.angle - HUT_PLACEMENT.angle) < 0.3 &&
+        Math.abs(placement.distance - HUT_PLACEMENT.distance) < 0.5
+      expect(sameSpot).toBe(false)
+    }
   })
 })

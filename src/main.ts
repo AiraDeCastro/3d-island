@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
-import { createIslandTrees, SAND_RADIUS, OCEAN_RADIUS, OCEAN_LEVEL } from './scene/Island'
+import { createIslandTrees, createIslandHut, SAND_RADIUS, OCEAN_RADIUS, OCEAN_LEVEL } from './scene/Island'
 import { createSky } from './scene/Sky'
 import { createCamera, createControls } from './scene/Camera'
 import { WindSystem } from './systems/WindSystem'
@@ -32,7 +32,13 @@ const ocean = new OceanSystem({
   getSandHeightTexture: () => sand.heightMapTexture,
 })
 scene.add(sand.mesh, sand.particles.points, ocean.mesh)
-scene.add(createIslandTrees(wind.uniforms))
+
+// The grove and hut load Blender-authored glTF models over the network —
+// don't block the rest of the scene (already interactive) on that; they
+// pop in once ready, same spirit as the PRD's <3s time-to-interactive
+// budget applying to the *experience*, not every last asset.
+createIslandTrees(wind.uniforms).then((grove) => scene.add(grove))
+createIslandHut(wind.uniforms).then((hut) => scene.add(hut))
 
 const { dome, sunLight } = createSky()
 scene.add(dome, sunLight)

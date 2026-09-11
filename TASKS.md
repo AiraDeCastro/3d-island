@@ -34,10 +34,10 @@ Goal: the three systems that make Isla *Isla* — sand, water, wind.
 
 Goal: the scene feels inhabited and runs everywhere it needs to.
 
-- [ ] Set up a real modeling pipeline (Blender → glTF → `gltf-transform`/Draco) and replace the procedural `CoconutTree.ts` with authored, compressed tree assets — flagged when Milestone 1 built the trees procedurally instead
-- [ ] Source/model 1–2 beach huts (thatched roof) with one cloth element each (curtain or hammock)
-- [ ] Wire hut cloth to the `WindSystem` uniform
-- [ ] Add warm interior hut glow for dusk lighting
+- [x] Set up a real modeling pipeline (Blender → glTF → Draco) and replace the procedural `CoconutTree.ts` with authored, compressed tree assets — `tools/blender/build_coconut_tree.py`, headless, Draco baked in by Blender's own exporter (no separate `gltf-transform` step needed)
+- [x] Source/model 1–2 beach huts (thatched roof) with one cloth element each (curtain or hammock) — `tools/blender/build_beach_hut.py`, a doorway curtain
+- [x] Wire hut cloth to the `WindSystem` uniform — via `applyWindSway.ts`, the same helper the tree fronds use
+- [x] Add warm interior hut glow for dusk lighting — a small warm `PointLight` added in `Hut.ts`
 - [ ] Implement `AudioSystem.ts` — looping surf/wind bed with fade in/out
 - [ ] Build `Controls.ts` — corner-docked mute toggle and quality toggle
 - [ ] Implement `DeviceProfile.ts` — capability probe driving shadow resolution, wave-mesh density, and pixel ratio

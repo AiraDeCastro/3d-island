@@ -38,13 +38,13 @@ Goal: the scene feels inhabited and runs everywhere it needs to.
 - [x] Source/model 1–2 beach huts (thatched roof) with one cloth element each (curtain or hammock) — `tools/blender/build_beach_hut.py`, a doorway curtain
 - [x] Wire hut cloth to the `WindSystem` uniform — via `applyWindSway.ts`, the same helper the tree fronds use
 - [x] Add warm interior hut glow for dusk lighting — a small warm `PointLight` added in `Hut.ts`
-- [ ] Implement `AudioSystem.ts` — looping surf/wind bed with fade in/out
-- [ ] Build `Controls.ts` — corner-docked mute toggle and quality toggle
-- [ ] Implement `DeviceProfile.ts` — capability probe driving shadow resolution, wave-mesh density, and pixel ratio
-- [ ] Build `HintOverlay.ts` — idle-fade "touch the sand" hint, dismissed permanently on first interaction
-- [ ] Add bloom on water highlights; gate SSAO to the top quality tier only
-- [ ] Compress assets — Draco geometry, KTX2 textures, trim/loop audio beds
-- [ ] Mobile pass on a real mid-range Android device — touch parity, adaptive quality behavior
+- [x] Implement `AudioSystem.ts` — looping surf/wind bed with fade in/out — synthesized via Web Audio (filtered noise), not audio files; wind volume rides the shared `WindSystem` gust envelope
+- [x] Build `Controls.ts` — corner-docked mute toggle and quality toggle
+- [x] Implement `DeviceProfile.ts` — capability probe driving wave-mesh density and pixel ratio (no shadows are cast anywhere yet, so there's no shadow resolution to gate)
+- [x] Build `HintOverlay.ts` — idle-fade "touch the sand" hint, dismissed permanently on first interaction
+- [x] Add bloom on water highlights; gate SSAO to the top quality tier only
+- [x] Compress assets — Draco geometry (done, via Blender's own exporter). KTX2 textures and audio-file trimming don't apply: the project has no raster textures anywhere (materials are flat/vertex-colored) and no audio files (ambience is synthesized, not sampled) — revisit only if either of those stops being true
+- [ ] Mobile pass on a real mid-range Android device — touch parity, adaptive quality behavior. **Partially validated only**: the browser tool's mobile viewport/touch emulation (375×812, coarse-pointer) shows the layout adapting correctly, `DeviceProfile` correctly auto-selecting the low tier, and touch-drag registering (dismissed the hint) — but that's emulation, not a real device, and I don't have physical hardware to test against. Leaving this open until someone can check on an actual mid-range Android phone.
 
 ## Milestone 3 — Launch (1–2 wks)
 

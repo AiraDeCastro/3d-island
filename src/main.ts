@@ -19,11 +19,26 @@ import { mountHintOverlay } from './ui/HintOverlay'
 const canvas = document.querySelector<HTMLCanvasElement>('#app')!
 canvas.style.touchAction = 'none' // single-finger drag shapes sand; don't let the page scroll instead
 
+// Some embedding contexts (a not-yet-laid-out iframe, a backgrounded PWA
+// launch, certain mobile browser chrome transitions) can report a
+// momentarily zero-sized viewport. Clamping to at least 1px keeps every
+// render target/pass valid from the very first frame instead of hitting
+// "framebuffer incomplete: attachment has zero size" until the next
+// resize event corrects it.
+function currentViewportSize() {
+  return {
+    width: Math.max(window.innerWidth, 1),
+    height: Math.max(window.innerHeight, 1),
+  }
+}
+
 let qualityTier: QualityTier = chooseQualityTier(detectCapabilities())
 let profile = getQualityProfile(qualityTier)
 
+const initialSize = currentViewportSize()
+
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
-renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.setSize(initialSize.width, initialSize.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, profile.pixelRatioCap))
 renderer.toneMapping = THREE.ACESFilmicToneMapping
 renderer.toneMappingExposure = 1
@@ -65,28 +80,26 @@ const sunDirection = sunLight.position.clone().normalize()
 sand.setSun(sunDirection, sunLight.color)
 ocean.setSun(sunDirection, sunLight.color)
 
-const camera = createCamera(window.innerWidth / window.innerHeight)
+const camera = createCamera(initialSize.width / initialSize.height)
 const cameraControls = createCameraControls(camera, canvas)
 
 const composer = new EffectComposer(renderer)
 composer.addPass(new RenderPass(scene, camera))
 
-const ssaoPass = new SSAOPass(scene, camera, window.innerWidth, window.innerHeight)
+const ssaoPass = new SSAOPass(scene, camera, initialSize.width, initialSize.height)
 ssaoPass.enabled = profile.ssaoEnabled
 composer.addPass(ssaoPass)
 
 // Threshold kept high so only real highlights (sun glint, foam crests)
 // bloom — not the whole bright sky/sand.
-const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.5, 0.4, 0.85)
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(initialSize.width, initialSize.height), 0.5, 0.4, 0.85)
 bloomPass.enabled = profile.bloomEnabled
 composer.addPass(bloomPass)
 
 composer.addPass(new OutputPass())
 
 function resize() {
-  const width = window.innerWidth
-  const height = window.innerHeight
-  if (width === 0 || height === 0) return // e.g. a transient layout pass with no viewport yet
+  const { width, height } = currentViewportSize()
 
   camera.aspect = width / height
   camera.updateProjectionMatrix()

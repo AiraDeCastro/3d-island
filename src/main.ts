@@ -3,8 +3,12 @@ import * as THREE from 'three'
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
-import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
+// SSAOPass is dynamically imported below (see ensureSsaoPass) — it's only
+// ever used on the high quality tier, and Lighthouse measured it adding
+// ~700ms of parse/compile blocking time to *every* load, including
+// low-tier devices that were never going to enable it.
+import type { SSAOPass as SSAOPassType } from 'three/addons/postprocessing/SSAOPass.js'
 import { createIslandTrees, createIslandHut, SAND_RADIUS, OCEAN_RADIUS, OCEAN_LEVEL } from './scene/Island'
 import { createSky } from './scene/Sky'
 import { createCamera, createControls as createCameraControls } from './scene/Camera'
@@ -86,10 +90,6 @@ const cameraControls = createCameraControls(camera, canvas)
 const composer = new EffectComposer(renderer)
 composer.addPass(new RenderPass(scene, camera))
 
-const ssaoPass = new SSAOPass(scene, camera, initialSize.width, initialSize.height)
-ssaoPass.enabled = profile.ssaoEnabled
-composer.addPass(ssaoPass)
-
 // Threshold kept high so only real highlights (sun glint, foam crests)
 // bloom — not the whole bright sky/sand.
 const bloomPass = new UnrealBloomPass(new THREE.Vector2(initialSize.width, initialSize.height), 0.5, 0.4, 0.85)
@@ -98,6 +98,27 @@ composer.addPass(bloomPass)
 
 composer.addPass(new OutputPass())
 
+let ssaoPass: SSAOPassType | null = null
+let ssaoLoading: Promise<SSAOPassType> | null = null
+
+/** Lazily imports, builds, and inserts SSAOPass the first time it's actually needed. */
+function ensureSsaoPass(): Promise<SSAOPassType> {
+  ssaoLoading ??= import('three/addons/postprocessing/SSAOPass.js').then(({ SSAOPass }) => {
+    const { width, height } = currentViewportSize()
+    const pass = new SSAOPass(scene, camera, width, height)
+    composer.insertPass(pass, 1) // right after RenderPass, before bloom/output
+    ssaoPass = pass
+    return pass
+  })
+  return ssaoLoading
+}
+
+if (profile.ssaoEnabled) {
+  void ensureSsaoPass().then((pass) => {
+    pass.enabled = true
+  })
+}
+
 function resize() {
   const { width, height } = currentViewportSize()
 
@@ -105,7 +126,7 @@ function resize() {
   camera.updateProjectionMatrix()
   renderer.setSize(width, height)
   composer.setSize(width, height)
-  ssaoPass.setSize(width, height)
+  ssaoPass?.setSize(width, height)
 }
 window.addEventListener('resize', resize)
 
@@ -126,8 +147,14 @@ mountControls({
     qualityTier = tier
     profile = getQualityProfile(tier)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, profile.pixelRatioCap))
-    ssaoPass.enabled = profile.ssaoEnabled
     bloomPass.enabled = profile.bloomEnabled
+    if (profile.ssaoEnabled) {
+      void ensureSsaoPass().then((pass) => {
+        pass.enabled = true
+      })
+    } else if (ssaoPass) {
+      ssaoPass.enabled = false
+    }
   },
 })
 
